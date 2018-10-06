@@ -1,10 +1,11 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include <cstdio>
 using namespace std;
 
 class Mobile{
-    string name;
+    char name[50];
     float price;
     int memory;
 public:
@@ -16,8 +17,7 @@ void Mobile::accept()
 {
     cout<<"\nEnter mobile details : ";
     cout<<"\nName : ";
-    getline(cin,name);
-
+    cin >> name;
     cout<<"\nPrice : ";
     cin>>price;
     cout<<"Memory storage : ";
@@ -41,7 +41,7 @@ void createFile()
     cin>>n;
 
     ofstream fout;
-    fout.open("Data.txt",ios::out);
+    fout.open("Data.txt",ios::out | ios::binary);
 
     Mobile M;
 
@@ -60,7 +60,7 @@ void displayFile()
     ifstream fin;
     Mobile M1;
 
-    fin.open("Data.txt",ios::in);
+    fin.open("Data.txt",ios::in | ios::binary);
 
     while(fin)
     {
