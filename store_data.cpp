@@ -100,7 +100,7 @@ int displayFile()
 
 void buyPhone(int cnt)
 {
-    cout<<cnt;
+  
     displayFile();
     int buy_num;
 
