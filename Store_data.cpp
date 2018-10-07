@@ -19,16 +19,60 @@ class Mobile : public Store{
 public:
     void accept();
     void display();
+    void display(int);
     char* getName(){return name;}
     float getPrice(){return price;}
     int getMemory(){return memory;}
 };
 
 
+void cartAdd(int);
+void cartDisplay();
+
+
+void cartAdd(int num){
+    fstream file;
+    file.open("Data.txt", ios::in | ios::binary);
+    Mobile m1;
+    if(num == 1){
+        file.read((char *)&m1, sizeof(m1));
+
+    }else{
+        for(int i = 0 ; i < num ; i++){
+            file.read((char *)&m1, sizeof(m1));
+        }
+    }
+    m1.display();
+    file.close();
+    file.open("Cart", ios::out | ios::binary | ios::app);
+    file.write((char *)&m1, sizeof(m1));
+    file.close();
+}
+
+void cartDisplay(){
+    Mobile m1;
+    fstream file;
+    file.open("Cart", ios::in | ios::binary);
+    int cnt = 1;
+    while(file)
+    {
+        file.read((char*)&m1, sizeof(m1));
+
+        if(file.eof() != 0)
+            break;
+
+        m1.display(cnt);
+        cnt++;
+        cout<<endl;
+    }
+    file.close();
+}
 //------------------------------------------------
 void Mobile::accept()
 {
-    cout<<"\nEnter mobile details : ";
+    cout << "-------------------------" << endl;
+    cout<<"Enter mobile details : " << endl;
+    cout << "-------------------------" << endl;
     cout<<"\nName : ";
     cin >> name;
     cout<<"Price : ";
@@ -40,17 +84,24 @@ void Mobile::accept()
 //----------------------------------------------
 void Mobile::display()
 {
+    cout << "-------------------------" << endl;
     cout<<"Name : "<<name<<endl;
     cout<<"Price : "<<price<<endl;
     cout<<"Memory : "<<memory<<endl;
 }
 //-----------------------------------------------
-
+void Mobile::display(int cnt)
+{
+    cout << "-------------------------" << endl;
+    cout<< cnt << ".Name : "<<name<<endl;
+    cout<<"  Price : "<<price<<endl;
+    cout<<"  Memory : "<<memory<<endl;
+}
 //----------------------------------------------
 void createFile()
 {
     int n;
-
+    cout << "-------------------------" << endl;
     cout<<"\nEnter number of phones : ";
     cin>>n;
 
@@ -86,8 +137,8 @@ int displayFile()
         if(fin.eof()!=0)
             break;
 
-        cout<<cnt<<" ";
-        M1.display();
+        //cout<<cnt<<".";
+        M1.display(cnt);
         cnt++;
         cout<<endl;
     }
@@ -101,17 +152,22 @@ int displayFile()
 
 void buyPhone(int cnt)
 {
-    cout<<cnt;
+    cout<<cnt << endl;
     displayFile();
     int buy_num;
-
+    cout << "-------------------------" << endl;
    cout<<"\n Which phone do you want to buy?(Enter the number)";
    cin>>buy_num;                //As per the number before the phone (cnt)
 
-    if(buy_num < cnt)
+    if(buy_num < cnt){
+        cartAdd(buy_num);
+        cout << "-------------------------" << endl;
         cout<<"Success! Added to cart.";
-    else
+    }
+    else{
+        cout << "-------------------------" << endl;
         cout<<"Phone not in store.";
+    }
 }
 //---------------------------------------------------------------------
 void search_ph()
@@ -121,7 +177,7 @@ void search_ph()
     void Smemory();
 
     int param;
-
+    cout << "-------------------------" << endl;
     cout<<"\nSearch by - "<<endl;
     cout<<"1. Name"<<endl;
     cout<<"2. Price"<<endl;
@@ -148,7 +204,7 @@ void Sname()
     ifstream fin;
     Mobile M1;
     flag=0;
-
+    cout << "-------------------------" << endl;
     cout<<"Enter name to be searched : ";
     cin>>name;
 
@@ -163,6 +219,7 @@ void Sname()
 
         if(!strcmp(M1.getName(),name))
         {
+            cout << "-------------------------" << endl;
             cout<<"\nPhone record found."<<endl;
             M1.display();
             flag=1;
@@ -171,8 +228,10 @@ void Sname()
     }
     fin.close();
 
-    if(flag==0)
+    if(flag==0){
+        cout << "-------------------------" << endl;
         cout<<"Record not found."<<endl;
+    }
 
 }
 //---------------------------------------------------------
@@ -183,7 +242,7 @@ void Sprice()
     ifstream fin;
     Mobile M1;
     flag=0;
-
+    cout << "-------------------------" << endl;
     cout<<"Enter price of phone to be searched : ";
     cin>>price;
 
@@ -199,6 +258,7 @@ void Sprice()
 
         if(M1.getPrice() == price)
         {
+            cout << "-------------------------" << endl;
             cout<<"\nPhone record found."<<endl;
             M1.display();
             flag=1;
@@ -207,8 +267,10 @@ void Sprice()
     }
     fin.close();
 
-    if(flag==0)
+    if(flag==0){
+        cout << "-------------------------" << endl;
         cout<<"Record not found."<<endl;
+    }
 
 }
 //----------------------------------------------------------------------
@@ -220,11 +282,11 @@ void Smemory()
     ifstream fin;
     Mobile M1;
     flag=0;
-
+    cout << "-------------------------" << endl;
     cout<<"Enter memory of phone to be searched : ";
     cin>>memory;
 
-    fin.open("Data.txt", ios::in);
+    fin.open("Data", ios::in | ios::binary);
 
     while(fin)
     {
@@ -237,6 +299,7 @@ void Smemory()
 
         if(M1.getMemory() == memory)
         {
+            cout << "-------------------------" << endl;
             cout<<"\nPhone record found."<<endl;
             M1.display();
             flag=1;
@@ -245,12 +308,17 @@ void Smemory()
     }
     fin.close();
 
-    if(flag==0)
+    if(flag==0){
+        cout << "-------------------------" << endl;
         cout<<"Record not found."<<endl;
+    }
 
 }
 
-
+void exitDeleteDatabase(){
+    remove("Data.txt");
+    remove("Cart");
+}
 
 
 //----------------------------------------------------------------------
@@ -287,6 +355,13 @@ int main()
 
             case 4 :    search_ph();
                         break;
+            case 5:     cartDisplay();
+                        break;
+            case 6:    exitDeleteDatabase();
+                        break;
+            default:
+                        cout << "-------------------------" << endl;
+                        cout << "Please Enter correct Choice" << endl;
 
         }
 
@@ -295,6 +370,3 @@ int main()
 
     return 0;
 }
-
-
-
