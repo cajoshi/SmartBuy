@@ -24,6 +24,7 @@ public:
     int getMemory(){return memory;}
 };
 
+
 //------------------------------------------------
 void Mobile::accept()
 {
@@ -233,6 +234,7 @@ void Smemory()
             break;
 
 
+
         if(M1.getMemory() == memory)
         {
             cout<<"\nPhone record found."<<endl;
@@ -276,6 +278,7 @@ int main()
             case 1 :    createFile();
                         break;
 
+
             case 2 :    cnt=displayFile();
                         break;
 
@@ -284,7 +287,6 @@ int main()
 
             case 4 :    search_ph();
                         break;
-
 
         }
 
